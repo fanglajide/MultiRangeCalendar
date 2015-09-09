@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AbsListView;
+import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
 import com.cheheihome.supercalendar.R;
@@ -36,7 +37,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         dayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DayModel dayModel = days.get(10);
+                DayModel dayModel = days.get(310);
                 dayModel.setRoom_num(dayModel.getRoom_num() > 0 ? 0 : 1);
 
                 DayView daycell = (DayView) gridView.getChildAt(10);
@@ -51,14 +52,24 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
     }
 
     private void setGrid() {
+        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                DayModel dayModel = days.get(position);
+              //  dayModel.setRoom_num(dayModel.getRoom_num() == 0 ? 1 : 0);
+                DayView dayView = (DayView) gridView.getChildAt(position - gridView.getFirstVisiblePosition());
+                // dayView.setDayModel(dayModel);
+            //    dayView.toggle();
 
+            }
+        });
         gridView.setSuperCallBack(new SuperGridView.SuperCallBack() {
             @Override
             public void onDown(int postion) {
 
                 DayModel startModel = (DayModel) gridView.getAdapter().getItem(postion);
-                startModel.setRoom_num(startModel.getRoom_num() == 0 ? 1 : 0);
-                open = startModel.getRoom_num() != 0;
+              //  startModel.setRoom_num(startModel.getRoom_num() == 0 ? 1 : 0);
+                open = startModel.getRoom_num() == 0;
 
                 //       DayView dayView = (DayView) gridView .getChildAt(postion - gridView.getFirstVisiblePosition());
                 // dayView.setDayModel(startModel);
@@ -96,19 +107,24 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
             startpostion = endpostion;
             endpostion = t;
         }
+        Log.d("super-onScroll", "firstvisibleitem:" + gridView.getFirstVisiblePosition() + "--lastvisiblepositon:" + gridView.getLastVisiblePosition());
 
-        for (int i = 0; gridView.getFirstVisiblePosition() <= i && i < gridView.getLastVisiblePosition(); i++) {
-            DayView dayView = (DayView) gridView.getChildAt(i - gridView.getFirstVisiblePosition());
+        for (int i = gridView.getFirstVisiblePosition(); gridView.getFirstVisiblePosition() <= i && i < gridView.getLastVisiblePosition(); i++) {
+            int child = i - gridView.getFirstVisiblePosition();
+            Log.d("super-child", child + "");
+            DayView dayView = (DayView) gridView.getChildAt(child);
 
             if (i >= startpostion && i <= endpostion) {
                 //    int color = open ? Color.GRAY : Color.WHITE;
+                Log.d("SUPER-setstatus", i + "");
+
                 if (dayView != null && dayView.getOpen() != open) dayView.setStatus(open);
             } else {
                 Log.d("SUPER-reset", i + "");
-                DayModel dayModel = days.get(i);
+                //  DayModel dayModel = ;
                 // dayView.setOpen(dayModel.getRoom_num()>0);
-                Log.d("SUPER-reset", i + "--room_num:" + dayModel.getRoom_num());
-                dayView.setStatus(dayModel.getRoom_num() > 0);
+                //  Log.d("SUPER-reset", i + "--room_num:" + dayModel.getRoom_num());
+                dayView.setStatus(days.get(i).getRoom_num() > 0);
                 // dayView.invalidate();
 
             }
@@ -121,12 +137,19 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
                 //    int color = open ? Color.GRAY : Color.WHITE;
                 // if (dayView != null) dayView.setOpen(open);
                 //  Log.d("SUPER-get", i + "");
-
-                days.get(i).setRoom_num(open ? 1 : 0);
+                if (i >= 0)
+                    days.get(i).setRoom_num(open ? 1 : 0);
                 // dayView.setDayModel(dayModel);
                 //  (days.get(i)).setRoom_num(open ? 1 : 0);
+
+//                if (startpostion == endpostion) {
+//                    Log.d("SUPER-click", i + "");
+//
+//                    DayView dayView = (DayView) gridView.getChildAt(i - gridView.getFirstVisiblePosition());
+//                    dayView.toggle();
+//                }
             }
-          //  adapter.notifyDataSetChanged();
+            //  adapter.notifyDataSetChanged();
 
         }
     }
@@ -154,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
 
     private void setGridView() {
         Calendar b = Calendar.getInstance();
-        b.add(Calendar.MONTH, -1);
+        b.add(Calendar.WEEK_OF_YEAR, -1);
         b.set(Calendar.DAY_OF_WEEK, 1);
         Calendar e = Calendar.getInstance();
         e.add(Calendar.YEAR, 1);

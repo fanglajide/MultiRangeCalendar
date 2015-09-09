@@ -51,17 +51,17 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
                 int moveY = (int) event.getY();
                 if (isNewEvent) {
                     if (Math.abs(lastPointX - moveX) > 100) {
-                        mSlideMode = SlideMode.HORIONTAL;
+                        mSlideMode = SlideMode.SELECT;
                         isNewEvent = false;
                       //  endPostion = pointToPosition(moveX, moveY);
 
                     } else {
-                        mSlideMode = SlideMode.VERTICAL;
+                        mSlideMode = SlideMode.SCROLL;
                         isNewEvent = false;
                         return super.onTouchEvent(event);
                     }
                 } else {
-                    if (mSlideMode == SlideMode.HORIONTAL) {
+                    if (mSlideMode == SlideMode.SELECT) {
                        // endPostion = pointToPosition(moveX, moveY);
 
                     } else return super.onTouchEvent(event);
@@ -82,12 +82,15 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
             // break;
             case MotionEvent.ACTION_UP:
                 Log.d("touch-event", "up");
-                endPostion = pointToPosition((int) event.getX(), (int) event.getY());
-                if(endPostion==-1)break;
-                if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
-                startPosion = 0;
-                endPostion = 0;
-                ts=-1;te=-1;
+                if(mSlideMode==SlideMode.SELECT){
+                    endPostion = pointToPosition((int) event.getX(), (int) event.getY());
+                    if(endPostion==-1)break;
+                    if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
+                    startPosion = 0;
+                    endPostion = 0;
+                    ts=-1;te=-1;
+                }
+
 //                endPostion = pointToPosition((int) event.getX(), (int) event.getY());
 //                if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
 //                startPosion = 0;
@@ -112,6 +115,9 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
                 lastPointX = (int) event.getX();
                 lastPointY = (int) event.getY();
                 startPosion = pointToPosition(lastPointX, lastPointY);
+
+                //avoid action_down at divider
+                if(startPosion==-1)startPosion=pointToPosition(lastPointX+getHorizontalSpacing(),lastPointY+getVerticalSpacing());
                 if (startPosion >= 0)
                     if (mCallBack != null) mCallBack.onDown(startPosion);
                 Log.d("Super-onDown", startPosion + "");
@@ -120,18 +126,25 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
 
                 Log.d("touch-inter", "move");
                 int moveX = (int) event.getX();
-               // if (isNewEvent)
+                if (isNewEvent)
                     if (Math.abs(lastPointX - moveX) > 100)
-                    {mSlideMode=SlideMode.HORIONTAL;
+                    {mSlideMode=SlideMode.SELECT;
                         return true;
                     }
                 break;
             case MotionEvent.ACTION_UP:
 
                 Log.d("touch-inter", "up");
+               int upPointX = (int) event.getX();
+                int upPointY = (int) event.getY();
+                    endPostion = pointToPosition((int) event.getX(), (int) event.getY());
 
-//                endPostion = pointToPosition(event);
-//                if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
+                if ((Math.abs(lastPointX - upPointX) < 80)&&(Math.abs(lastPointY - upPointY) < 80))
+                      if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
+
+            //    endPostion = pointToPosition((int) event.getX(), (int) event.getY());
+
+              //  if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
 //                startPosion = 0;
 //                endPostion = 0;
                 break;
@@ -141,8 +154,8 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
 
 
     private enum SlideMode {
-        HORIONTAL,
-        VERTICAL;
+        SELECT,
+        SCROLL;
     }
 
 
@@ -187,7 +200,7 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
     @Override
     public void invalidate() {
         Log.d("super", "invalidate");
-        if (mSlideMode == SlideMode.HORIONTAL) return;
+        if (mSlideMode == SlideMode.SELECT) return;
         super.invalidate();
     }
 }
