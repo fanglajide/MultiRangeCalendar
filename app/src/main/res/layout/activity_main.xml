@@ -1,0 +1,31 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".MainActivity" android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/toolbar"
+        android:layout_width="match_parent"
+        android:layout_height="?attr/actionBarSize"
+        app:layout_collapseMode="pin"
+        android:background="@android:color/holo_purple"
+        app:title="@string/app_name"
+        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
+
+
+
+
+    <lecalendar.views.DayView android:layout_gravity="center"
+        android:padding="2dp"
+        android:layout_width="50dp"
+        android:layout_height="50dp" android:id="@+id/dayView"/>
+
+<com.cheheihome.views.SuperGridView android:layout_marginTop="10dp"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent" android:id="@+id/gridView"
+    android:numColumns="7"
+
+    ></com.cheheihome.views.SuperGridView>
+</LinearLayout>
