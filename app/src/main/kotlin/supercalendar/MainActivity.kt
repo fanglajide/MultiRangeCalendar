@@ -8,7 +8,7 @@ import android.util.Log
 import android.view.*
 import android.widget.BaseAdapter
 import android.widget.Toast
-import com.cheheihome.views.SuperGridView
+import com.cheheihome.SuperGridView
 import kotlinx.android.synthetic.activity_main.dayView
 import kotlinx.android.synthetic.activity_main.gridView
 import kotlinx.android.synthetic.activity_main.toolbar
@@ -18,7 +18,7 @@ import java.util.ArrayList
 import java.util.Calendar
 import java.util.Date
 
-public class MainActivity : AppCompatActivity(),SuperGridView.SuperCallBack {
+public class MainActivity : AppCompatActivity(), SuperGridView.SuperCallBack {
 
     var mContext: Context = this;
     override fun onCreate(savedInstanceState: Bundle?) {

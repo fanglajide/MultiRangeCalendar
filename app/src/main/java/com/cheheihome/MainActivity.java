@@ -2,6 +2,7 @@ package com.cheheihome;
 
 import android.content.Context;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -12,7 +13,6 @@ import android.widget.AdapterView;
 import android.widget.BaseAdapter;
 
 import com.cheheihome.supercalendar.R;
-import com.cheheihome.views.SuperGridView;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -24,15 +24,18 @@ import lecalendar.views.DayView;
  * Created by chanlevel on 15/9/8.
  */
 public class MainActivity extends AppCompatActivity implements AbsListView.OnScrollListener {
-    SuperGridView gridView;
+    LeCalendar gridView;
     DayView dayView;
     boolean flag;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        StrictMode.setThreadPolicy(new StrictMode.ThreadPolicy.Builder().penaltyFlashScreen().penaltyLog().build());
+
         super.onCreate(savedInstanceState);
+
         setContentView(R.layout.activity_main);
-        gridView = (SuperGridView) findViewById(R.id.gridView);
+        gridView = (LeCalendar) findViewById(R.id.gridView);
         dayView = (DayView) findViewById(R.id.dayView);
         dayView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -46,9 +49,19 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
 
             }
         });
-        setGridView();
 
-        setGrid();
+
+        Calendar b = Calendar.getInstance();
+        b.add(Calendar.WEEK_OF_YEAR, -1);
+        b.set(Calendar.DAY_OF_WEEK, 1);
+        Calendar e = Calendar.getInstance();
+        e.add(Calendar.YEAR, 1);
+        e.set(Calendar.DAY_OF_WEEK, 7);
+        getDates(b, e);
+     gridView.setDays(days );
+       // setGridView();
+
+   //     setGrid();
     }
 
     private void setGrid() {
@@ -162,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
             DayModel dayModel = new DayModel(false, false, null, 0, 0, null, temp.getTime(), false, false, false, false);
 
             dayModel.setRoom_num((int) (Math.random() * 5));
+            dayModel.setIsFestival(dayModel.getRoom_num()>3?true:false);
             dayModel.setPrice(dayModel.getRoom_num());
             dayModel.init();
             this.days.add(dayModel);

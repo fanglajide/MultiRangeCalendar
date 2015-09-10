@@ -50,4 +50,6 @@ dependencies {
     //provided 'com.alibaba:fastjson:1.2.6'
     compile 'com.android.support:gridlayout-v7:23.0.0'
     compile 'com.android.support:design:23.0.0'
+    debugCompile 'me.drakeet.library:crashwoodpecker:0.9.7'
+    releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.7'
 }

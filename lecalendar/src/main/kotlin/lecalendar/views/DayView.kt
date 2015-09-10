@@ -4,11 +4,12 @@ import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
 import android.graphics.Paint
+import android.text.TextUtils
 import android.util.AttributeSet
+import android.util.DisplayMetrics
 import android.util.Log
 import android.view.View
 import android.widget.TextView
-import android.widget.Toast
 import lecalendar.model.DayModel
 import java.util.Calendar
 import java.util.Date
@@ -22,12 +23,20 @@ public class DayView : TextView {
 
     var daymodel: DayModel = DayModel(false, false, null, 0, 0, null, Date(), false, false, false, false);
     var mPaint = Paint();
-    var upColor = Color.RED;
-    var midColor = Color.BLACK;
-    var belowColor = Color.CYAN;
+    var upColor = Color.argb(0xff, 0xf3, 0x70, 0x70);
+    var midColor = Color.argb(0xff, 0x66, 0x66, 0x66);
+    var belowColor = Color.argb(0xff, 0xed, 0xaa, 0x70);
     var backgroudColor = Color.WHITE;
+    var dividerColor = Color.argb(0xff, 0xd5, 0xd5, 0xd5);
+    var festivalBackColor = Color.argb(0xff, 0xff, 0xc6, 0x52);
 
+    var OPENBACKCOLOR = Color.argb(0xff, 0xfc, 0xfc, 0xfc);
+    var CLOSEBACKCOLOR = Color.argb(0xff, 0xe8, 0xe8, 0xe8);
+    var CLOSETEXTCLOR = Color.argb(0xff, 0x99, 0x99, 0x99);
+    var destiny = DisplayMetrics().density.toInt();
     var open = true;
+
+    var selectType: SElECTTYPE = SElECTTYPE.STATUS;
 
     public constructor(context: Context) : super(context) {
         init()
@@ -41,15 +50,18 @@ public class DayView : TextView {
         init()
     }
 
-
+    //just for test
     private fun init() {
-      //  if (daymodel != null)
+        //   Log.d("super-metrics", getContext().getResources().getDisplayMetrics().toString())
+        //  Log.d("super-metrics", DisplayMetrics().toString())
+        destiny = getContext().getResources().getDisplayMetrics().density.toInt()
+        //  if (daymodel != null)
 
         setOnClickListener {
 
             v ->
-        //    toggle();
-            Toast.makeText(getContext(), daymodel.toString(), Toast.LENGTH_SHORT).show()
+            //    toggle();
+            // Toast.makeText(getContext(), daymodel.toString(), Toast.LENGTH_SHORT).show()
 
 
         }
@@ -60,13 +72,13 @@ public class DayView : TextView {
     public fun setDayModel(daymodel: DayModel) {
         this.daymodel = daymodel;
         open = daymodel.room_num > 0
-        Log.d("DAYVIEW","setdaymodel");
+       // Log.d("DAYVIEW", "setdaymodel");
         invalidate()
     }
 
     public fun setStatus(open: Boolean) {
         this.open = open;
-        Log.d("DAYVIEW","setStatus:"+open);
+       // Log.d("DAYVIEW", "setStatus:" + open);
         invalidate()
     }
 
@@ -75,7 +87,7 @@ public class DayView : TextView {
     }
 
     override fun onDraw(canvas: Canvas) {
-       // Log.d("DAYVIEW","onDraw");
+        // Log.d("DAYVIEW","onDraw");
         super<TextView>.onDraw(canvas)
         var c: Calendar = Calendar.getInstance();
         c.setTime(daymodel.date);
@@ -83,6 +95,16 @@ public class DayView : TextView {
 
         var totalHeight = getMeasuredHeight() - getPaddingBottom() - getPaddingTop();
         var totalWidh = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
+
+        //draw festivalback
+
+        if (daymodel.isFestival) {
+            var fbradius = totalHeight * 6f / 20f;
+            mPaint.setAntiAlias(true)
+            mPaint.setColor(festivalBackColor);
+            canvas.drawCircle(getMeasuredWidth() / 2f, getMeasuredHeight() / 2f, fbradius, mPaint);
+        }
+
         //draw festival
         var festivalHeight = totalHeight * 1f / 4f;
         var festTextHeight = totalHeight * 1f / 4f;
@@ -92,16 +114,19 @@ public class DayView : TextView {
         festivalPaint.setColor(upColor);
         festivalPaint.setTextAlign(Paint.Align.CENTER)
         var up: String ? = "";
-        if (daymodel.isFestival) up = daymodel.festival;
+        if (daymodel.isFestival && !TextUtils.isEmpty(daymodel.festival)) up = daymodel.festival;
         else if (daymodel.isFirstDayofMonth) {
             up = (1 + c.get(Calendar.MONTH)).toString() + "月"
-        }
-        canvas.drawText(up, totalWidh.toFloat() / 2f + getPaddingLeft().toFloat(), +getPaddingTop().toFloat() + festivalHeight.toFloat(), festivalPaint);
+        } else if (daymodel.isToday) up = "今天"
+        var testWidth = festivalPaint.measureText(up);
+        canvas.drawText(up, testWidth / 2f + getPaddingLeft().toFloat(), +getPaddingTop().toFloat() + festivalHeight.toFloat(), festivalPaint);
+
 
         //draw mid
         //  var midY = getPaddingTop() + festivalHeight + 5;
-        var midTextHeight = totalHeight * 3f / 7f;
-        festivalPaint.setColor(midColor);
+        var midTextHeight = totalHeight * 7f / 20;
+
+        festivalPaint.setColor(if (open) midColor else CLOSETEXTCLOR);
         festivalPaint.setTextSize(midTextHeight);
 
         var mid = c.get(Calendar.DATE)
@@ -110,30 +135,39 @@ public class DayView : TextView {
         //draw price
         var belowY = totalHeight + getPaddingTop() ;
         var priceTextHeight = totalHeight / 4f;
-        festivalPaint.setColor(belowColor);
+        festivalPaint.setColor(if (open) belowColor else CLOSETEXTCLOR);
         festivalPaint.setTextSize(priceTextHeight);
         var price = daymodel.price ;
-        canvas.drawText(price.toString(), totalWidh.toFloat() / 2f + getPaddingLeft(), belowY.toFloat(), festivalPaint);
+        var room_num = daymodel.room_num;
+        var belowText = if (room_num == 0) "无房" else room_num.toString() + "间"
+        canvas.drawText(belowText, totalWidh.toFloat() / 2f + getPaddingLeft(), belowY.toFloat(), festivalPaint);
 
-        mPaint.setColor(Color.BLACK);
-        mPaint.setStrokeWidth(5f)
+        mPaint.setColor(dividerColor);
+
+        mPaint.setStrokeWidth(2f * destiny)
         if (daymodel.isFirstWeekinMonth) {
-            mPaint.setColor(Color.YELLOW)
             canvas.drawLine(0f, 0f, getMeasuredWidth().toFloat(), 0f, mPaint)
         };
         if (daymodel.isFirstDayofMonth) {
-            mPaint.setColor(Color.BLUE)
             canvas.drawLine(0f, 0f, 0f, getMeasuredHeight().toFloat().toFloat(), mPaint)
         };
         if (daymodel.isLastWeekinMonth) {
-            mPaint.setColor(Color.RED)
             canvas.drawLine(0f, getMeasuredHeight().toFloat(), getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
         };
 
-        if (!open) backgroudColor = Color.GRAY;
-        else if (daymodel.isToday) backgroudColor = Color.RED;
-        else backgroudColor = Color.WHITE
+        if (!open) backgroudColor = CLOSEBACKCOLOR;
+        else backgroudColor = OPENBACKCOLOR
         setBackgroundColor(backgroudColor)
+
+    }
+
+    override fun onMeasure(widthSpec: Int, heightSpec: Int) {
+
+        var w = getMeasuredWidth();
+        //  var h=getMeasuredHeight();
+
+        var newheight = View.MeasureSpec.makeMeasureSpec(w, View.MeasureSpec.EXACTLY);
+        super<TextView>.onMeasure(widthSpec, newheight)
 
     }
 
@@ -142,6 +176,22 @@ public class DayView : TextView {
 
 
     }
+
+    enum class SElECTTYPE {
+        STATUS, PRICE
+    }
+
+
+    var impl: NoticeDisplayImpl? = null;
+
+    public fun setNotifceDisplayImpl(impl: NoticeDisplayImpl) {
+        this.impl = impl;
+    }
+
+    public interface NoticeDisplayImpl {
+        fun onDay(date: Date, price: Int): String;
+    }
+
 
     var callBack: DayViewCallBack ? = null;
 
@@ -152,8 +202,9 @@ public class DayView : TextView {
     public interface DayViewCallBack {
         fun callBack(v: View, dayModel: DayModel?)
     }
-    override fun  setBackgroundColor(color:Int){
-       // Log.d("DAYVIEW","setBackgroundColor");
+
+    override fun setBackgroundColor(color: Int) {
+        // Log.d("DAYVIEW","setBackgroundColor");
         super<TextView>.setBackgroundColor(color);
     }
 
