@@ -35,8 +35,11 @@ public class DayView : TextView {
     var CLOSETEXTCLOR = Color.argb(0xff, 0x99, 0x99, 0x99);
     var destiny = DisplayMetrics().density.toInt();
     var open = true;
+    var selecting = false
 
-    var selectType: SElECTTYPE = SElECTTYPE.STATUS;
+    var SELELCTEDCOLOR = Color.argb(0xaa, 0xf3, 0x70, 0x70);
+
+    var mSelectType: SElECTTYPE = SElECTTYPE.STATUS;
 
     public constructor(context: Context) : super(context) {
         init()
@@ -72,13 +75,14 @@ public class DayView : TextView {
     public fun setDayModel(daymodel: DayModel) {
         this.daymodel = daymodel;
         open = daymodel.room_num > 0
-       // Log.d("DAYVIEW", "setdaymodel");
+        selecting = daymodel.selecting
+        // Log.d("DAYVIEW", "setdaymodel");
         invalidate()
     }
 
     public fun setStatus(open: Boolean) {
         this.open = open;
-       // Log.d("DAYVIEW", "setStatus:" + open);
+        // Log.d("DAYVIEW", "setStatus:" + open);
         invalidate()
     }
 
@@ -139,7 +143,15 @@ public class DayView : TextView {
         festivalPaint.setTextSize(priceTextHeight);
         var price = daymodel.price ;
         var room_num = daymodel.room_num;
-        var belowText = if (room_num == 0) "无房" else room_num.toString() + "间"
+        // var belowText= if (room_num == 0) "无房" else room_num.toString() + "间";
+        var belowText = "";
+        if (mSelectType == SElECTTYPE.STATUS) {
+            belowText = if (room_num == 0) "无房" else room_num.toString() + "间";
+        } else {
+            belowText = price.toString();
+        }
+        //var belowText = impl?.onDay(daymodel.date, daymodel.price, daymodel.room_num);
+
         canvas.drawText(belowText, totalWidh.toFloat() / 2f + getPaddingLeft(), belowY.toFloat(), festivalPaint);
 
         mPaint.setColor(dividerColor);
@@ -151,12 +163,16 @@ public class DayView : TextView {
         if (daymodel.isFirstDayofMonth) {
             canvas.drawLine(0f, 0f, 0f, getMeasuredHeight().toFloat().toFloat(), mPaint)
         };
-        if (daymodel.isLastWeekinMonth) {
-            canvas.drawLine(0f, getMeasuredHeight().toFloat(), getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
-        };
+        //        if (daymodel.isLastWeekinMonth) {
+        //            canvas.drawLine(0f, getMeasuredHeight().toFloat(), getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
+        //        };
 
-        if (!open) backgroudColor = CLOSEBACKCOLOR;
-        else backgroudColor = OPENBACKCOLOR
+        if (selecting) backgroudColor = SELELCTEDCOLOR
+        else
+            if (!open) backgroudColor = CLOSEBACKCOLOR;
+            else backgroudColor = OPENBACKCOLOR
+
+
         setBackgroundColor(backgroudColor)
 
     }
@@ -177,6 +193,11 @@ public class DayView : TextView {
 
     }
 
+    fun setSelectingStatus(selecting: Boolean) {
+        this.selecting = selecting;
+        invalidate()
+    }
+
     enum class SElECTTYPE {
         STATUS, PRICE
     }
@@ -189,7 +210,7 @@ public class DayView : TextView {
     }
 
     public interface NoticeDisplayImpl {
-        fun onDay(date: Date, price: Int): String;
+        fun onDay(date: Date, price: Int, room_num: Int): String;
     }
 
 

@@ -22,7 +22,7 @@ public class DateUtils {
     }
 
     public fun isInLastWeekOfMonth(c: Calendar): Boolean {
-        var weekofmonth=c.get(Calendar.WEEK_OF_MONTH)
+        var weekofmonth = c.get(Calendar.WEEK_OF_MONTH)
 
         var t = c
         t.set(Calendar.DAY_OF_MONTH, 1);
@@ -30,6 +30,18 @@ public class DateUtils {
         t.add(Calendar.DATE, -1);
         if (weekofmonth == t.get(Calendar.WEEK_OF_MONTH)) return true;
         return false
+    }
+
+    public fun isLast7dayOfMonth(c: Calendar): Boolean {
+        var dayofmonth = c.get(Calendar.DAY_OF_MONTH)
+        var t = c
+        t.set(Calendar.DAY_OF_MONTH, 1);
+        t.add(Calendar.MONTH, 1);
+        t.add(Calendar.DATE, -1);
+
+        var tdayofmonth = c.get(Calendar.DAY_OF_MONTH);
+        if (tdayofmonth - dayofmonth < 7) return true
+        return false;
     }
 
 

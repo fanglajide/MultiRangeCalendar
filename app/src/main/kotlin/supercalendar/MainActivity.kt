@@ -67,7 +67,6 @@ public class MainActivity : AppCompatActivity(), SuperGridView.SuperCallBack {
         dayModel.isFirstWeekinMonth = true;
         dayModel.isFirstDayofMonth = true
         dayModel.room_num = 200
-        dayModel.isLastWeekinMonth = true
         dayModel.price = 2000
         dayModel.init();
         dayView.setDayModel(dayModel)

@@ -40,12 +40,14 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         dayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                DayModel dayModel = days.get(310);
-                dayModel.setRoom_num(dayModel.getRoom_num() > 0 ? 0 : 1);
-
-                DayView daycell = (DayView) gridView.getChildAt(10);
-                daycell.setStatus(flag = !flag);
+//                DayModel dayModel = days.get(310);
+//                dayModel.setRoom_num(dayModel.getRoom_num() > 0 ? 0 : 1);
+//
+//                DayView daycell = (DayView) gridView.getChildAt(10);
+//                daycell.setStatus(flag = !flag);
                 // dayView.setDayModel(dayModel);
+
+                gridView.setType(DayView.SElECTTYPE.PRICE);
 
             }
         });
@@ -58,10 +60,10 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         e.add(Calendar.YEAR, 1);
         e.set(Calendar.DAY_OF_WEEK, 7);
         getDates(b, e);
-     gridView.setDays(days );
-       // setGridView();
+        gridView.setDays(days);
+        // setGridView();
 
-   //     setGrid();
+        //     setGrid();
     }
 
     private void setGrid() {
@@ -69,10 +71,10 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 DayModel dayModel = days.get(position);
-              //  dayModel.setRoom_num(dayModel.getRoom_num() == 0 ? 1 : 0);
+                //  dayModel.setRoom_num(dayModel.getRoom_num() == 0 ? 1 : 0);
                 DayView dayView = (DayView) gridView.getChildAt(position - gridView.getFirstVisiblePosition());
                 // dayView.setDayModel(dayModel);
-            //    dayView.toggle();
+                //    dayView.toggle();
 
             }
         });
@@ -81,7 +83,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
             public void onDown(int postion) {
 
                 DayModel startModel = (DayModel) gridView.getAdapter().getItem(postion);
-              //  startModel.setRoom_num(startModel.getRoom_num() == 0 ? 1 : 0);
+                //  startModel.setRoom_num(startModel.getRoom_num() == 0 ? 1 : 0);
                 open = startModel.getRoom_num() == 0;
 
                 //       DayView dayView = (DayView) gridView .getChildAt(postion - gridView.getFirstVisiblePosition());
@@ -175,7 +177,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
             DayModel dayModel = new DayModel(false, false, null, 0, 0, null, temp.getTime(), false, false, false, false);
 
             dayModel.setRoom_num((int) (Math.random() * 5));
-            dayModel.setIsFestival(dayModel.getRoom_num()>3?true:false);
+            dayModel.setIsFestival(dayModel.getRoom_num() > 3 ? true : false);
             dayModel.setPrice(dayModel.getRoom_num());
             dayModel.init();
             this.days.add(dayModel);
