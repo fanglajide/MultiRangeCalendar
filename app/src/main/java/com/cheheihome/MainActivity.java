@@ -1,22 +1,18 @@
 package com.cheheihome;
 
-import android.content.Context;
 import android.os.Bundle;
 import android.os.StrictMode;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
-import android.view.LayoutInflater;
 import android.view.View;
-import android.view.ViewGroup;
 import android.widget.AbsListView;
-import android.widget.AdapterView;
-import android.widget.BaseAdapter;
 
 import com.cheheihome.supercalendar.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 
 import lecalendar.model.DayModel;
 import lecalendar.views.DayView;
@@ -38,6 +34,8 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
         gridView = (LeCalendar) findViewById(R.id.gridView);
         dayView = (DayView) findViewById(R.id.dayView);
+        dayView.setDaymodel(new DayModel(false, true, "ablgcdp", 0, 0, null, new Date(), false, false, false, false));
+
         dayView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -50,7 +48,8 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
 
 //                gridView.setType(DayView.SElECTTYPE.PRICE);
                // Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
-                for (Date d : gridView.getTotalSelected())
+                List<Date> a=gridView.getTotalSelected();
+                for (Date d : a)
                     Log.d("super-select", d.toString());
 
             }
@@ -69,7 +68,6 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
 
         //     setGrid();
     }
-
 
 
     void getDates(Calendar begin, Calendar end) {
@@ -92,7 +90,6 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
 
     ArrayList<DayModel> days = new ArrayList<>();
 
-
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
 
@@ -104,70 +101,6 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
     }
 
     int visiblecount;
-
-    private class MAapter extends BaseAdapter {
-        Context context;
-
-        public MAapter(Context context) {
-            this.context = context;
-        }
-
-        @Override
-        public int getCount() {
-            return days.size();
-        }
-
-        @Override
-        public Object getItem(int position) {
-            return days.get(position);
-        }
-
-        @Override
-        public long getItemId(int position) {
-            return position;
-        }
-
-        @Override
-        public View getView(int position, View convertView, ViewGroup parent) {
-//            DayView dayView = new DayView(MainActivity.this);
-//            dayView.setHeight(150);
-//            dayView.setDayModel((DayModel) getItem(position));
-
-
-            ViewHolder holder;
-            if (convertView == null) {
-                convertView = LayoutInflater.from(context).inflate(R.layout.item_day, null);
-
-
-                holder = new ViewHolder();
-                holder.dayView = (DayView) convertView.findViewById(R.id.dayView);
-                convertView.setMinimumHeight(150);
-                convertView.setTag(holder);
-                holder.dayView.setDayModel(days.get(position));
-                return convertView;
-            } else {
-                holder = (ViewHolder) convertView.getTag();
-                holder.dayView.setDayModel(days.get(position));
-                convertView.setMinimumHeight(150);
-                return convertView;
-            }
-
-
-        }
-
-        @Override
-        public void notifyDataSetChanged() {
-
-            Log.d("super-adapter", "notifyDataSetChanged");
-            super.notifyDataSetChanged();
-        }
-
-        @Override
-        public void notifyDataSetInvalidated() {
-            Log.d("super-adapter", "notifyDataSetInvalidated");
-            super.notifyDataSetInvalidated();
-        }
-    }
 
     private static class ViewHolder {
         DayView dayView;

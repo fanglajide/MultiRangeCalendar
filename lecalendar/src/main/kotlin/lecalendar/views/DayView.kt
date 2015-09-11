@@ -55,15 +55,10 @@ public class DayView : View {
 
 
     private fun init() {
-         destiny = getContext().getResources().getDisplayMetrics().density.toInt()
+        destiny = getContext().getResources().getDisplayMetrics().density.toInt()
 
         setOnClickListener {
-
             v ->
-            //    toggle();
-            // Toast.makeText(getContext(), daymodel.toString(), Toast.LENGTH_SHORT).show()
-
-
         }
 
     }
@@ -97,8 +92,8 @@ public class DayView : View {
             if (!open) backgroudColor = CLOSEBACKCOLOR;
             else backgroudColor = OPENBACKCOLOR
         mPaint.setColor(backgroudColor)
-        canvas.drawRect(0f,0f,getMeasuredWidth().toFloat(),getMeasuredHeight().toFloat(),mPaint)
-        
+        canvas.drawRect(0f, 0f, getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
+
         var c: Calendar = Calendar.getInstance();
         c.setTime(daymodel.date);
 
@@ -106,21 +101,21 @@ public class DayView : View {
         var totalWidh = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
 
         //draw festivalback
-//        var testPaint :Paint=Paint();
-//        testPaint.setAntiAlias(true)
-//        testPaint.setColor(Color.BLUE)
-//        testPaint.setStrokeWidth(15f)
-//        canvas.drawPoint(getMeasuredWidth()/2f,getMeasuredHeight()/2f,testPaint);
+        //        var testPaint :Paint=Paint();
+        //        testPaint.setAntiAlias(true)
+        //        testPaint.setColor(Color.BLUE)
+        //        testPaint.setStrokeWidth(15f)
+        //        canvas.drawPoint(getMeasuredWidth()/2f,getMeasuredHeight()/2f,testPaint);
 
         if (daymodel.isFestival) {
-            var fbradius = totalHeight * 1f /4f;
+            var fbradius = totalHeight * 1f / 4f;
             mPaint.setAntiAlias(true)
             mPaint.setColor(festivalBackColor);
             canvas.drawCircle(getMeasuredWidth() / 2f, getMeasuredHeight() / 2f, fbradius, mPaint);
         }
 
         //draw festival
-     //   var festivalHeight = totalHeight * 1f / 4f;
+        //   var festivalHeight = totalHeight * 1f / 4f;
         var festTextHeight = totalHeight * 1f / 5f;
         var textPaint = Paint();
         textPaint.setAntiAlias(true)
@@ -134,9 +129,10 @@ public class DayView : View {
         } else if (daymodel.isToday) up = "今天"
         var testWidth = textPaint.measureText(up);
 
-        var festPosY=(getPaddingTop()+festTextHeight-textPaint.descent()/2)
-      //  Log.d("super-posY","as:"+textPaint.ascent().toString()+"-ds;"+textPaint.descent().toString())
-        canvas.drawText(up, getPaddingLeft().toFloat()+testWidth.toFloat()/2f, festPosY, textPaint);
+        var festPosY = (getPaddingTop() + festTextHeight - textPaint.descent() / 2)
+        //  Log.d("super-posY","as:"+textPaint.ascent().toString()+"-ds;"+textPaint.descent().toString())
+
+        canvas.drawText(up, getPaddingLeft().toFloat() + testWidth.toFloat() / 2f, festPosY, textPaint);
 
 
         //draw mid
@@ -147,18 +143,19 @@ public class DayView : View {
         textPaint.setTextSize(midTextHeight);
 
         var mid = c.get(Calendar.DATE)
-        var midTextPosY=getPaddingTop()/2+totalHeight / 2f + midTextHeight / 2f ;
+        var midTextPosY = getPaddingTop() / 2 + totalHeight / 2f + midTextHeight / 2f ;
         canvas.drawText(mid.toString(), totalWidh.toFloat() / 2f + getPaddingLeft(), midTextPosY, textPaint);
 
         //draw price
-        var belowY = totalHeight + getPaddingTop()-textPaint.descent()/2f ;
+        var belowY = totalHeight + getPaddingTop() - textPaint.descent() / 2f ;
         var priceTextHeight = totalHeight / 4f;
+
         textPaint.setColor(if (open) belowColor else CLOSETEXTCLOR);
         textPaint.setTextSize(priceTextHeight);
         var price = daymodel.price ;
         var room_num = daymodel.room_num;
         // var belowText= if (room_num == 0) "无房" else room_num.toString() + "间";
-        var belowText:String ;
+        var belowText: String ;
         if (mSelectType == SElECTTYPE.STATUS) {
             belowText = if (room_num == 0) "无房" else room_num.toString() + "间";
         } else {
@@ -180,8 +177,6 @@ public class DayView : View {
         //        if (daymodel.isLastWeekinMonth) {
         //            canvas.drawLine(0f, getMeasuredHeight().toFloat(), getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
         //        };
-
-       
 
 
     }
