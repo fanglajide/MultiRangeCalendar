@@ -26,7 +26,7 @@ public class DayView : TextView {
     var upColor = Color.argb(0xff, 0xf3, 0x70, 0x70);
     var midColor = Color.argb(0xff, 0x66, 0x66, 0x66);
     var belowColor = Color.argb(0xff, 0xed, 0xaa, 0x70);
-    var backgroudColor = Color.WHITE;
+    var backgroudColor = Color.argb(0xff, 0xfc, 0xfc, 0xfc);;
     var dividerColor = Color.argb(0xff, 0xd5, 0xd5, 0xd5);
     var festivalBackColor = Color.argb(0xff, 0xff, 0xc6, 0x52);
 
@@ -60,14 +60,14 @@ public class DayView : TextView {
         destiny = getContext().getResources().getDisplayMetrics().density.toInt()
         //  if (daymodel != null)
 
-        setOnClickListener {
-
-            v ->
-            //    toggle();
-            // Toast.makeText(getContext(), daymodel.toString(), Toast.LENGTH_SHORT).show()
-
-
-        }
+//        setOnClickListener {
+//
+//            v ->
+//            //    toggle();
+//            // Toast.makeText(getContext(), daymodel.toString(), Toast.LENGTH_SHORT).show()
+//
+//
+//        }
 
     }
 
@@ -101,50 +101,59 @@ public class DayView : TextView {
         var totalWidh = getMeasuredWidth() - getPaddingLeft() - getPaddingRight();
 
         //draw festivalback
+//        var testPaint :Paint=Paint();
+//        testPaint.setAntiAlias(true)
+//        testPaint.setColor(Color.BLUE)
+//        testPaint.setStrokeWidth(15f)
+//        canvas.drawPoint(getMeasuredWidth()/2f,getMeasuredHeight()/2f,testPaint);
 
         if (daymodel.isFestival) {
-            var fbradius = totalHeight * 6f / 20f;
+            var fbradius = totalHeight * 1f /4f;
             mPaint.setAntiAlias(true)
             mPaint.setColor(festivalBackColor);
             canvas.drawCircle(getMeasuredWidth() / 2f, getMeasuredHeight() / 2f, fbradius, mPaint);
         }
 
         //draw festival
-        var festivalHeight = totalHeight * 1f / 4f;
-        var festTextHeight = totalHeight * 1f / 4f;
-        var festivalPaint = Paint();
-        festivalPaint.setAntiAlias(true)
-        festivalPaint.setTextSize(festTextHeight);
-        festivalPaint.setColor(upColor);
-        festivalPaint.setTextAlign(Paint.Align.CENTER)
+     //   var festivalHeight = totalHeight * 1f / 4f;
+        var festTextHeight = totalHeight * 1f / 5f;
+        var textPaint = Paint();
+        textPaint.setAntiAlias(true)
+        textPaint.setTextSize(festTextHeight);
+        textPaint.setColor(upColor);
+        textPaint.setTextAlign(Paint.Align.CENTER)
         var up: String ? = "";
         if (daymodel.isFestival && !TextUtils.isEmpty(daymodel.festival)) up = daymodel.festival;
         else if (daymodel.isFirstDayofMonth) {
             up = (1 + c.get(Calendar.MONTH)).toString() + "月"
         } else if (daymodel.isToday) up = "今天"
-        var testWidth = festivalPaint.measureText(up);
-        canvas.drawText(up, testWidth / 2f + getPaddingLeft().toFloat(), +getPaddingTop().toFloat() + festivalHeight.toFloat(), festivalPaint);
+        var testWidth = textPaint.measureText(up);
+
+        var festPosY=(getPaddingTop()+festTextHeight-textPaint.descent()/2)
+        Log.d("super-posY","as:"+textPaint.ascent().toString()+"-ds;"+textPaint.descent().toString())
+        canvas.drawText(up, getPaddingLeft().toFloat()+testWidth.toFloat()/2f, festPosY, textPaint);
 
 
         //draw mid
         //  var midY = getPaddingTop() + festivalHeight + 5;
-        var midTextHeight = totalHeight * 7f / 20;
+        var midTextHeight = totalHeight * 1f / 3f;
 
-        festivalPaint.setColor(if (open) midColor else CLOSETEXTCLOR);
-        festivalPaint.setTextSize(midTextHeight);
+        textPaint.setColor(if (open) midColor else CLOSETEXTCLOR);
+        textPaint.setTextSize(midTextHeight);
 
         var mid = c.get(Calendar.DATE)
-        canvas.drawText(mid.toString(), totalWidh.toFloat() / 2f + getPaddingLeft(), totalHeight / 2f + midTextHeight / 2f, festivalPaint);
+        var midTextPosY=getPaddingTop()/2+totalHeight / 2f + midTextHeight / 2f-textPaint.descent()/2f;
+        canvas.drawText(mid.toString(), totalWidh.toFloat() / 2f + getPaddingLeft(), midTextPosY, textPaint);
 
         //draw price
-        var belowY = totalHeight + getPaddingTop() ;
-        var priceTextHeight = totalHeight / 4f;
-        festivalPaint.setColor(if (open) belowColor else CLOSETEXTCLOR);
-        festivalPaint.setTextSize(priceTextHeight);
+        var belowY = totalHeight + getPaddingTop()-textPaint.descent()/2f ;
+        var priceTextHeight = totalHeight / 5f;
+        textPaint.setColor(if (open) belowColor else CLOSETEXTCLOR);
+        textPaint.setTextSize(priceTextHeight);
         var price = daymodel.price ;
         var room_num = daymodel.room_num;
         // var belowText= if (room_num == 0) "无房" else room_num.toString() + "间";
-        var belowText = "";
+        var belowText:String ;
         if (mSelectType == SElECTTYPE.STATUS) {
             belowText = if (room_num == 0) "无房" else room_num.toString() + "间";
         } else {
@@ -152,7 +161,7 @@ public class DayView : TextView {
         }
         //var belowText = impl?.onDay(daymodel.date, daymodel.price, daymodel.room_num);
 
-        canvas.drawText(belowText, totalWidh.toFloat() / 2f + getPaddingLeft(), belowY.toFloat(), festivalPaint);
+        canvas.drawText(belowText, totalWidh.toFloat() / 2f + getPaddingLeft(), belowY.toFloat(), textPaint);
 
         mPaint.setColor(dividerColor);
 
@@ -171,9 +180,8 @@ public class DayView : TextView {
         else
             if (!open) backgroudColor = CLOSEBACKCOLOR;
             else backgroudColor = OPENBACKCOLOR
-
-
         setBackgroundColor(backgroudColor)
+
 
     }
 
