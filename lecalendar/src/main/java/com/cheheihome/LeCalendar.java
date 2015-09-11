@@ -15,7 +15,7 @@ import lecalendar.views.DayView;
 /**
  * Created by chanlevel on 15/9/10.
  */
-public class LeCalendar extends SuperGridView implements SuperGridView.SuperCallBack {
+public class LeCalendar extends InterceptGridView implements InterceptGridView.SuperCallBack {
     private DayView.SElECTTYPE mSelectType = DayView.SElECTTYPE.STATUS;
     private
     ArrayList<DayModel> days = new ArrayList<>();

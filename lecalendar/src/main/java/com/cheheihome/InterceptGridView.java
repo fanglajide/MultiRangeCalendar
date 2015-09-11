@@ -1,6 +1,7 @@
 package com.cheheihome;
 
 import android.content.Context;
+import android.os.Build;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
@@ -10,20 +11,20 @@ import android.widget.GridView;
 /**
  * Created by chanlevel on 15/9/8.
  */
-public class SuperGridView extends GridView implements AbsListView.OnScrollListener {
+public class InterceptGridView extends GridView implements AbsListView.OnScrollListener {
     int destiny;
-    public SuperGridView(Context context) {
+
+    public InterceptGridView(Context context) {
         super(context);
     }
 
-    public SuperGridView(Context context, AttributeSet attrs) {
+    public InterceptGridView(Context context, AttributeSet attrs) {
         super(context, attrs);
     }
 
-    public SuperGridView(Context context, AttributeSet attrs, int defStyleAttr) {
+    public InterceptGridView(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
     }
-
 
 
     SlideMode mSlideMode;
@@ -49,10 +50,10 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
                 int moveX = (int) event.getX();
                 int moveY = (int) event.getY();
                 if (isNewEvent) {
-                    if (Math.abs(lastPointX - moveX) > destiny*50) {
+                    if (Math.abs(lastPointX - moveX) > destiny * 50) {
                         mSlideMode = SlideMode.SELECT;
                         isNewEvent = false;
-                      //  endPostion = pointToPosition(moveX, moveY);
+                        //  endPostion = pointToPosition(moveX, moveY);
 
                     } else {
                         mSlideMode = SlideMode.SCROLL;
@@ -61,33 +62,35 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
                     }
                 } else {
                     if (mSlideMode == SlideMode.SELECT) {
-                       // endPostion = pointToPosition(moveX, moveY);
+                        // endPostion = pointToPosition(moveX, moveY);
 
                     } else return super.onTouchEvent(event);
                 }
                 endPostion = pointToPosition(moveX, moveY);
-                if(endPostion==-1) return true;
-                Log.d("super-end","end:"+endPostion+"-X:"+moveX+"-Y:"+moveY);
-                Log.d("Super-MOVE-start",  "start:"+startPosion+ "---end:" +endPostion);
-                Log.d("Super-MOVE-start", "ts:" +ts+ "---te:"+te);
+                if (endPostion == -1) return true;
+                Log.d("super-end", "end:" + endPostion + "-X:" + moveX + "-Y:" + moveY);
+                Log.d("Super-MOVE-start", "start:" + startPosion + "---end:" + endPostion);
+                Log.d("Super-MOVE-start", "ts:" + ts + "---te:" + te);
 
-                if (mCallBack != null && (ts != startPosion ||te != endPostion)) {
+                if (mCallBack != null && (ts != startPosion || te != endPostion)) {
                     mCallBack.onMove(startPosion, endPostion);
                     Log.d("Super-MOVE-start", startPosion + "");
                     Log.d("Super-MOVE-end", endPostion + "");
                     ts = startPosion;
                     te = endPostion;
-                } return true;
+                }
+                return true;
             // break;
             case MotionEvent.ACTION_UP:
                 Log.d("touch-event", "up");
-                if(mSlideMode==SlideMode.SELECT){
+                if (mSlideMode == SlideMode.SELECT) {
                     endPostion = pointToPosition((int) event.getX(), (int) event.getY());
-                    if(endPostion==-1)break;
+                    if (endPostion == -1) break;
                     if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
                     startPosion = 0;
                     endPostion = 0;
-                    ts=-1;te=-1;
+                    ts = -1;
+                    te = -1;
                 }
 
 //                endPostion = pointToPosition((int) event.getX(), (int) event.getY());
@@ -102,12 +105,12 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
     }
 
 
-   // temp
+    // temp
     int ts, te;
 
     @Override
     public boolean onInterceptTouchEvent(MotionEvent event) {
-        destiny=(destiny==0)? (int) getContext().getResources().getDisplayMetrics().density:destiny;
+        destiny = (destiny == 0) ? (int) getContext().getResources().getDisplayMetrics().density : destiny;
 
         switch (event.getAction()) {
             case MotionEvent.ACTION_DOWN:
@@ -120,7 +123,12 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
                 startPosion = pointToPosition(lastPointX, lastPointY);
 
                 //avoid action_down at divider
-                if(startPosion==-1)startPosion=pointToPosition(lastPointX+getHorizontalSpacing(),lastPointY+getVerticalSpacing());
+                if (startPosion == -1) {
+                    if (Build.VERSION.SDK_INT >= 16)
+                        startPosion = pointToPosition(lastPointX + getHorizontalSpacing(), lastPointY + getVerticalSpacing());
+                    else
+                        startPosion = pointToPosition(lastPointX + 3 * destiny, lastPointY + 3 * destiny);
+                }
                 if (startPosion >= 0)
                     if (mCallBack != null) mCallBack.onDown(startPosion);
                 Log.d("Super-onDown", startPosion + "");
@@ -130,24 +138,25 @@ public class SuperGridView extends GridView implements AbsListView.OnScrollListe
                 Log.d("touch-inter", "move");
                 int moveX = (int) event.getX();
                 if (isNewEvent)
-                    if (Math.abs(lastPointX - moveX) > destiny*50)
-                    {mSlideMode=SlideMode.SELECT;
+                    if (Math.abs(lastPointX - moveX) > destiny * 50) {
+                        mSlideMode = SlideMode.SELECT;
                         return true;
                     }
                 break;
             case MotionEvent.ACTION_UP:
 
                 Log.d("touch-inter", "up");
-               int upPointX = (int) event.getX();
+                int upPointX = (int) event.getX();
                 int upPointY = (int) event.getY();
-                    endPostion = pointToPosition((int) event.getX(), (int) event.getY());
+                endPostion = pointToPosition((int) event.getX(), (int) event.getY());
 
-                if ((Math.abs(lastPointX - upPointX) < destiny*40)&&(Math.abs(lastPointY - upPointY) < destiny*40))
-                      if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
+                if ((Math.abs(lastPointX - upPointX) < destiny * 40) && (Math.abs(lastPointY - upPointY) < destiny * 40)) {
+                    if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
+                    return true;
+                }
+                //    endPostion = pointToPosition((int) event.getX(), (int) event.getY());
 
-            //    endPostion = pointToPosition((int) event.getX(), (int) event.getY());
-
-              //  if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
+                //  if (mCallBack != null) mCallBack.onUp(startPosion, endPostion);
 //                startPosion = 0;
 //                endPostion = 0;
                 break;

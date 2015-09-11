@@ -70,108 +70,6 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         //     setGrid();
     }
 
-    private void setGrid() {
-        gridView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
-            @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                DayModel dayModel = days.get(position);
-                //  dayModel.setRoom_num(dayModel.getRoom_num() == 0 ? 1 : 0);
-                DayView dayView = (DayView) gridView.getChildAt(position - gridView.getFirstVisiblePosition());
-                // dayView.setDayModel(dayModel);
-                //    dayView.toggle();
-
-            }
-        });
-        gridView.setSuperCallBack(new SuperGridView.SuperCallBack() {
-            @Override
-            public void onDown(int postion) {
-
-                DayModel startModel = (DayModel) gridView.getAdapter().getItem(postion);
-                //  startModel.setRoom_num(startModel.getRoom_num() == 0 ? 1 : 0);
-                open = startModel.getRoom_num() == 0;
-
-                //       DayView dayView = (DayView) gridView .getChildAt(postion - gridView.getFirstVisiblePosition());
-                // dayView.setDayModel(startModel);
-            }
-
-            @Override
-            public void onMove(int startpostion, int endpostion) {
-                Log.d("super-callback", "onMove:start:" + startpostion + "--end:" + endpostion);
-                update(startpostion, endpostion, false);
-
-            }
-
-            @Override
-            public void onUp(int startpostion, int endpostion) {
-
-                Log.d("super-callback", "onUp:start:" + startpostion + "--end:" + endpostion);
-                update(startpostion, endpostion, true);
-
-            }
-        });
-    }
-
-    boolean open;
-    int tempB, tempE;
-
-    private void update(int startpostion, int endpostion, boolean update) {
-
-        //  if (tempB == startpostion && tempE == endpostion) return;
-        Log.d("super-upadte", startpostion + "---" + endpostion);
-        tempB = startpostion;
-        tempE = endpostion;
-
-        if (startpostion > endpostion) {
-            int t = startpostion;
-            startpostion = endpostion;
-            endpostion = t;
-        }
-        Log.d("super-onScroll", "firstvisibleitem:" + gridView.getFirstVisiblePosition() + "--lastvisiblepositon:" + gridView.getLastVisiblePosition());
-
-        for (int i = gridView.getFirstVisiblePosition(); gridView.getFirstVisiblePosition() <= i && i < gridView.getLastVisiblePosition(); i++) {
-            int child = i - gridView.getFirstVisiblePosition();
-            Log.d("super-child", child + "");
-            DayView dayView = (DayView) gridView.getChildAt(child);
-
-            if (i >= startpostion && i <= endpostion) {
-                //    int color = open ? Color.GRAY : Color.WHITE;
-                Log.d("SUPER-setstatus", i + "");
-
-                if (dayView != null && dayView.getOpen() != open) dayView.setStatus(open);
-            } else {
-                Log.d("SUPER-reset", i + "");
-                //  DayModel dayModel = ;
-                // dayView.setOpen(dayModel.getRoom_num()>0);
-                //  Log.d("SUPER-reset", i + "--room_num:" + dayModel.getRoom_num());
-                dayView.setStatus(days.get(i).getRoom_num() > 0);
-                // dayView.invalidate();
-
-            }
-
-        }
-        if (update) {
-            for (int i = startpostion; i <= endpostion; i++) {
-                // DayView dayView = (DayView) gridView.getChildAt(i - gridView.getFirstVisiblePosition());
-
-                //    int color = open ? Color.GRAY : Color.WHITE;
-                // if (dayView != null) dayView.setOpen(open);
-                //  Log.d("SUPER-get", i + "");
-                if (i >= 0)
-                    days.get(i).setRoom_num(open ? 1 : 0);
-                // dayView.setDayModel(dayModel);
-                //  (days.get(i)).setRoom_num(open ? 1 : 0);
-
-//                if (startpostion == endpostion) {
-//                    Log.d("SUPER-click", i + "");
-//
-//                    DayView dayView = (DayView) gridView.getChildAt(i - gridView.getFirstVisiblePosition());
-//                    dayView.toggle();
-//                }
-            }
-            //  adapter.notifyDataSetChanged();
-
-        }
-    }
 
 
     void getDates(Calendar begin, Calendar end) {
@@ -193,22 +91,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
     }
 
     ArrayList<DayModel> days = new ArrayList<>();
-    MAapter adapter;
 
-    private void setGridView() {
-        Calendar b = Calendar.getInstance();
-        b.add(Calendar.WEEK_OF_YEAR, -1);
-        b.set(Calendar.DAY_OF_WEEK, 1);
-        Calendar e = Calendar.getInstance();
-        e.add(Calendar.YEAR, 1);
-        e.set(Calendar.DAY_OF_WEEK, 7);
-        getDates(b, e);
-        adapter = new MAapter(MainActivity.this);
-        gridView.setAdapter(adapter);
-
-        //gridView.setOnItemClickListener { view, parent, i, l ->System.out.print(i.toString())  }
-
-    }
 
     @Override
     public void onScrollStateChanged(AbsListView view, int scrollState) {
