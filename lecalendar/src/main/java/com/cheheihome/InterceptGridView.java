@@ -6,12 +6,11 @@ import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.AbsListView;
-import android.widget.GridView;
 
 /**
  * Created by chanlevel on 15/9/8.
  */
-public class InterceptGridView extends GridView implements AbsListView.OnScrollListener {
+public class InterceptGridView extends HeaderGridView implements AbsListView.OnScrollListener {
     int destiny;
 
     public InterceptGridView(Context context) {

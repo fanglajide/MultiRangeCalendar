@@ -23,14 +23,23 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
 
     public LeCalendar(Context context) {
         super(context);
+        init();
     }
 
     public LeCalendar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public LeCalendar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
+       // View header = LayoutInflater.from(getContext()).inflate(R.layout.calendar_header, null);
+     //   addHeaderView(header);
+
     }
 
     public void setType(DayView.SElECTTYPE type) {

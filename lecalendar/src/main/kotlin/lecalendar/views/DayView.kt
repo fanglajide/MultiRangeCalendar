@@ -167,7 +167,7 @@ public class DayView : View {
 
         mPaint.setColor(dividerColor);
 
-        mPaint.setStrokeWidth(2f * destiny)
+        mPaint.setStrokeWidth(1f * destiny)
         if (daymodel.isFirstWeekinMonth) {
             canvas.drawLine(0f, 0f, getMeasuredWidthAndState().toFloat(), 0f, mPaint)
         };

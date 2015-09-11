@@ -3,6 +3,7 @@
     package="com.cheheihome.supercalendar" >
 
     <application
+        android:name="supercalendar.App"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
