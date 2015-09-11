@@ -16,6 +16,7 @@ import com.cheheihome.supercalendar.R;
 
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 
 import lecalendar.model.DayModel;
 import lecalendar.views.DayView;
@@ -47,7 +48,10 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
 //                daycell.setStatus(flag = !flag);
                 // dayView.setDayModel(dayModel);
 
-                gridView.setType(DayView.SElECTTYPE.PRICE);
+//                gridView.setType(DayView.SElECTTYPE.PRICE);
+               // Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+                for (Date d : gridView.getTotalSelected())
+                    Log.d("super-select", d.toString());
 
             }
         });
