@@ -149,8 +149,10 @@ public class DayView : View {
         //draw price
         var belowY = totalHeight + getPaddingTop() - textPaint.descent() / 2f ;
         var priceTextHeight = totalHeight / 4f;
+        if (selecting) textPaint.setColor(Color.WHITE)
+        else
+            textPaint.setColor(if (open) belowColor else CLOSETEXTCLOR);
 
-        textPaint.setColor(if (open) belowColor else CLOSETEXTCLOR);
         textPaint.setTextSize(priceTextHeight);
         var price = daymodel.price ;
         var room_num = daymodel.room_num;
