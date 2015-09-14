@@ -21,7 +21,7 @@ import lecalendar.views.DayView;
  * Created by chanlevel on 15/9/8.
  */
 public class MainActivity extends AppCompatActivity implements AbsListView.OnScrollListener {
-    LeCalendar gridView;
+    LeCalendarPlus gridView;
     DayView dayView;
     boolean flag;
 
@@ -32,7 +32,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.activity_main);
-        gridView = (LeCalendar) findViewById(R.id.gridView);
+        gridView = (LeCalendarPlus) findViewById(R.id.gridView);
         dayView = (DayView) findViewById(R.id.dayView);
         dayView.setDaymodel(new DayModel(false, true, "ablgcdp", 0, 0, null, new Date(), false, false, false, false));
 

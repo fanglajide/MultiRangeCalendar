@@ -102,10 +102,7 @@ public class MainActivity : AppCompatActivity(), InterceptGridView.SuperCallBack
         e.set(Calendar.DAY_OF_WEEK, 7)
         getDates(b, e)
         gridView.setAdapter(MyAdapter(mContext))
-        gridView.setSuperCallBack(
-                this
 
-        )
         //gridView.setOnItemClickListener { view, parent, i, l ->System.out.print(i.toString())  }
 
     }
