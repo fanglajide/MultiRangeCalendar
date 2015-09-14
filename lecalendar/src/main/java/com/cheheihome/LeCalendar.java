@@ -15,7 +15,7 @@ import lecalendar.views.DayView;
 /**
  * Created by chanlevel on 15/9/10.
  */
-public class LeCalendar extends SuperGridView implements SuperGridView.SuperCallBack {
+public class LeCalendar extends InterceptGridView implements InterceptGridView.SuperCallBack {
     private DayView.SElECTTYPE mSelectType = DayView.SElECTTYPE.STATUS;
     private
     ArrayList<DayModel> days = new ArrayList<>();
@@ -23,14 +23,23 @@ public class LeCalendar extends SuperGridView implements SuperGridView.SuperCall
 
     public LeCalendar(Context context) {
         super(context);
+        init();
     }
 
     public LeCalendar(Context context, AttributeSet attrs) {
         super(context, attrs);
+        init();
     }
 
     public LeCalendar(Context context, AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        init();
+    }
+
+    private void init() {
+       // View header = LayoutInflater.from(getContext()).inflate(R.layout.calendar_header, null);
+     //   addHeaderView(header);
+
     }
 
     public void setType(DayView.SElECTTYPE type) {
