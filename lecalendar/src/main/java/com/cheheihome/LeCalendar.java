@@ -4,10 +4,8 @@ import android.content.Context;
 import android.os.Message;
 import android.util.AttributeSet;
 import android.util.Log;
-import android.widget.GridView;
 
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -39,13 +37,14 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
     }
 
     private void init() {
+       // View header = LayoutInflater.from(getContext()).inflate(R.layout.calendar_header, null);
+     //   addHeaderView(header);
 
-
-        setStretchMode(GridView.STRETCH_COLUMN_WIDTH);
-        setNumColumns(7);
-        // View header = LayoutInflater.from(getContext()).inflate(R.layout.calendar_header, null);
-        //   addHeaderView(header);
-
+    }
+    public void cleanSelection(){
+      for(DayModel  day:days)
+      day.setSelecting(false);
+        if(adapter!=null)adapter.notifyDataSetChanged();
     }
 
     public void setType(DayView.SElECTTYPE type) {
@@ -61,7 +60,6 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
             adapter = new LeAdapter(getContext(), days, mSelectType);
             setAdapter(adapter);
         }
-        adapter.notifyDataSetChanged();
     }
 
     public void setDays(ArrayList<DayModel> days) {
@@ -74,27 +72,6 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
         setSuperCallBack(this);
     }
 
-    public void chooseDays(int dayOfWeek) {
-        for (DayModel dayModel : days) {
-            Calendar cc = Calendar.getInstance();
-            cc.setTime(dayModel.getDate());
-            if (cc.get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
-                dayModel.setSelecting(true);
-            }
-        }
-        onRefresh();
-    }
-    public void unchooseDays(int dayOfWeek){
-        for (DayModel dayModel : days) {
-            Calendar cc = Calendar.getInstance();
-            cc.setTime(dayModel.getDate());
-            if (cc.get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
-                dayModel.setSelecting(false);
-            }
-        }
-        onRefresh();
-
-    }
 
     @Override
     public void onDown(int postion) {

@@ -137,4 +137,7 @@ public class LeCalendarPlus extends LinearLayout {
     public void chooseDays(int dayOfWeek) {
         mCalendar.chooseDays(dayOfWeek);
     }
+     public void cleanSelection(){
+     mCalendar.cleanSelection();
+    }
 }
