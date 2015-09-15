@@ -24,6 +24,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
     LeCalendarPlus gridView;
     DayView dayView;
     boolean flag;
+    DayView.SElECTTYPE type = DayView.SElECTTYPE.STATUS;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,7 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         setContentView(R.layout.activity_main);
         gridView = (LeCalendarPlus) findViewById(R.id.gridView);
         dayView = (DayView) findViewById(R.id.dayView);
-        dayView.setDaymodel(new DayModel(false, true, "ablgcdp", 0, 0, null, new Date(), false, false, false, false));
+        dayView.setDaymodel(new DayModel(false, true, "ablgcdp", 0, 0, null, new Date(), false, false, false, false, false));
 
         dayView.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -47,10 +48,13 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
                 // dayView.setDayModel(dayModel);
 
 //                gridView.setType(DayView.SElECTTYPE.PRICE);
-               // Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
-                List<Date> a=gridView.getTotalSelected();
+                // Toast.makeText(MainActivity.this, "", Toast.LENGTH_SHORT).show();
+                List<Date> a = gridView.getTotalSelected();
                 for (Date d : a)
                     Log.d("super-select", d.toString());
+                if (type == DayView.SElECTTYPE.PRICE) type = DayView.SElECTTYPE.STATUS;
+                else type = DayView.SElECTTYPE.PRICE;
+                gridView.setType(type);
 
             }
         });
@@ -74,11 +78,11 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         Calendar temp = begin;
         // if (this.days == null) this.days = ArrayList<DayModel>();
         while (temp.before(end)) {
-            DayModel dayModel = new DayModel(false, false, null, 0, 0, null, temp.getTime(), false, false, false, false);
+            DayModel dayModel = new DayModel(false, false, null, 0, 0, null, temp.getTime(), false, false, false, false, false);
 
             dayModel.setRoom_num((int) (Math.random() * 5));
             dayModel.setIsFestival(dayModel.getRoom_num() > 3 ? true : false);
-            dayModel.setPrice(dayModel.getRoom_num());
+            dayModel.setPrice(dayModel.getRoom_num()*10);
             dayModel.init();
             this.days.add(dayModel);
 

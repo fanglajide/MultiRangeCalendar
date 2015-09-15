@@ -60,7 +60,7 @@ public class MainActivity : AppCompatActivity(), InterceptGridView.SuperCallBack
     }
 
     fun setDayView() {
-        var dayModel: DayModel = DayModel(false, false, null, 0, 0, null, Date(), false, false, false, false);
+        var dayModel: DayModel = DayModel(false, false, null, 0, 0, null, Date(), false, false, false, false,false);
 
         dayModel.isFestival = true
         dayModel.festival = "lala"
@@ -80,7 +80,7 @@ public class MainActivity : AppCompatActivity(), InterceptGridView.SuperCallBack
         temp = begin;
         // if (this.days == null) this.days = ArrayList<DayModel>();
         while (temp.before(end)) {
-            var dayModel: DayModel = DayModel(false, false, null, 0, 0, null, temp.getTime(), false, false, false, false);
+            var dayModel: DayModel = DayModel(false, false, null, 0, 0, null, temp.getTime(), false, false, false, false,false);
             dayModel.init();
             dayModel.price=(Math.random()*1000f).toInt();
             this.days.add(dayModel)

@@ -32,6 +32,9 @@ public class LeAdapter extends BaseAdapter {
         this.type = type;
     }
 
+    public void setType(DayView.SElECTTYPE type) {
+        this.type = type;
+    }
 
     @Override
     public int getCount() {
@@ -69,10 +72,10 @@ public class LeAdapter extends BaseAdapter {
         } else {
             holder = (ViewHolder) convertView.getTag();
             holder.dayView.setDayModel(days.get(position));
-            convertView.setMinimumHeight(150);
+//            convertView.setMinimumHeight(150);
 
         }
-        holder.dayView.setmSelectType(type);
+        holder.dayView.setSelectType(type);
 
         return convertView;
     }

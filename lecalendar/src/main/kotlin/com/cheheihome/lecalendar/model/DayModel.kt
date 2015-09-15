@@ -22,7 +22,8 @@ data class DayModel(
         var isFirstDayofMonth: Boolean,
         var isFirstWeekinMonth: Boolean,
         var selecting: Boolean,
-        var isWeekEnd: Boolean
+        var isWeekEnd: Boolean,
+        var beforeToday:Boolean
 
 ) {
     public fun init() {
@@ -32,6 +33,7 @@ data class DayModel(
         c.setTime(date);
 
         isToday = dateUtils.sameDay(c, today);
+        beforeToday=dateUtils.beforeToaday(c)
         isFirstDayofMonth = c.get(Calendar.DAY_OF_MONTH) == 1
         isFirstWeekinMonth = c.get(Calendar.DAY_OF_WEEK_IN_MONTH) ==1
       //  isLastWeekinMonth = dateUtils.isLast7dayOfMonth(c)

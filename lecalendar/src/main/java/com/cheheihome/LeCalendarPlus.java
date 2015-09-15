@@ -82,7 +82,7 @@ public class LeCalendarPlus extends LinearLayout {
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
             if (i == 5 || i == 6) {
                 week[i].setTextColor(Color.RED);
-                final int finalI = i+1;
+                final int finalI = i + 1;
                 week[i].setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                     @Override
                     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -137,7 +137,8 @@ public class LeCalendarPlus extends LinearLayout {
     public void chooseDays(int dayOfWeek) {
         mCalendar.chooseDays(dayOfWeek);
     }
-     public void cleanSelection(){
-     mCalendar.cleanSelection();
+
+    public void cleanSelection() {
+        mCalendar.cleanSelection();
     }
 }

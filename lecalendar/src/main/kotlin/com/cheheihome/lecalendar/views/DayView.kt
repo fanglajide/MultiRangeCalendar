@@ -21,7 +21,7 @@ import java.util.Date
 
 public class DayView : View {
 
-    var daymodel: DayModel = DayModel(false, false, null, 0, 0, null, Date(), false, false, false, false);
+    var daymodel: DayModel = DayModel(false, false, null, 0, 0, null, Date(), false, false, false, false, false);
     var mPaint = Paint();
     val upColor = Color.argb(0xff, 0xf3, 0x70, 0x70);
     val midColor = Color.argb(0xff, 0x66, 0x66, 0x66);
@@ -38,7 +38,7 @@ public class DayView : View {
     var selecting = false
 
     var SELELCTEDCOLOR = Color.argb(0xaa, 0xf3, 0x70, 0x70);
-
+    var UNABLETEXTCOLOR=Color.argb(0xff,0xbd,0xc5,0xca)
     var mSelectType: SElECTTYPE = SElECTTYPE.STATUS;
 
     public constructor(context: Context) : super(context) {
@@ -86,11 +86,12 @@ public class DayView : View {
         // Log.d("DAYVIEW","onDraw");
         super<View>.onDraw(canvas)
 
-
-        if (selecting) backgroudColor = SELELCTEDCOLOR
+        if (daymodel.beforeToday) backgroudColor = OPENBACKCOLOR
         else
-            if (!open) backgroudColor = CLOSEBACKCOLOR;
-            else backgroudColor = OPENBACKCOLOR
+            if (selecting) backgroudColor = SELELCTEDCOLOR
+            else
+                if (!open) backgroudColor = CLOSEBACKCOLOR;
+                else backgroudColor = OPENBACKCOLOR
         mPaint.setColor(backgroudColor)
         canvas.drawRect(0f, 0f, getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
 
@@ -107,7 +108,7 @@ public class DayView : View {
         //        testPaint.setStrokeWidth(15f)
         //        canvas.drawPoint(getMeasuredWidth()/2f,getMeasuredHeight()/2f,testPaint);
 
-        if (daymodel.isFestival) {
+        if (daymodel.isFestival&&!daymodel.beforeToday) {
             var fbradius = totalHeight * 1f / 4f;
             mPaint.setAntiAlias(true)
             mPaint.setColor(festivalBackColor);
@@ -139,7 +140,7 @@ public class DayView : View {
         //  var midY = getPaddingTop() + festivalHeight + 5;
         var midTextHeight = totalHeight * 1f / 3f;
 
-        textPaint.setColor(if (open) midColor else CLOSETEXTCLOR);
+        textPaint.setColor(if(daymodel.beforeToday) UNABLETEXTCOLOR  else if (open) midColor else CLOSETEXTCLOR);
         textPaint.setTextSize(midTextHeight);
 
         var mid = c.get(Calendar.DATE)
@@ -149,9 +150,8 @@ public class DayView : View {
         //draw price
         var belowY = totalHeight + getPaddingTop() - textPaint.descent() / 2f ;
         var priceTextHeight = totalHeight / 4f;
-        if (selecting) textPaint.setColor(Color.WHITE)
-        else
-            textPaint.setColor(if (open) belowColor else CLOSETEXTCLOR);
+
+        textPaint.setColor( if(selecting) Color.WHITE else if (open) belowColor else CLOSETEXTCLOR);
 
         textPaint.setTextSize(priceTextHeight);
         var price = daymodel.price ;
@@ -164,8 +164,8 @@ public class DayView : View {
             belowText = price.toString();
         }
         //var belowText = impl?.onDay(daymodel.date, daymodel.price, daymodel.room_num);
-
-        canvas.drawText(belowText, totalWidh.toFloat() / 2f + getPaddingLeft(), belowY.toFloat(), textPaint);
+        if (!daymodel.beforeToday)
+            canvas.drawText(belowText, totalWidh.toFloat() / 2f + getPaddingLeft(), belowY.toFloat(), textPaint);
 
         mPaint.setColor(dividerColor);
 
@@ -202,6 +202,11 @@ public class DayView : View {
     fun setSelectingStatus(selecting: Boolean) {
         this.selecting = selecting;
         invalidate()
+    }
+
+    fun setSelectType(type: SElECTTYPE) {
+        this.mSelectType = type;
+        invalidate();
     }
 
     enum class SElECTTYPE {

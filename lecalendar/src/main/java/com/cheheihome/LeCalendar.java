@@ -6,6 +6,7 @@ import android.util.AttributeSet;
 import android.util.Log;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
@@ -37,29 +38,62 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
     }
 
     private void init() {
-       // View header = LayoutInflater.from(getContext()).inflate(R.layout.calendar_header, null);
-     //   addHeaderView(header);
+        setNumColumns(7);
+        // View header = LayoutInflater.from(getContext()).inflate(R.layout.calendar_header, null);
+        //   addHeaderView(header);
 
     }
-    public void cleanSelection(){
-      for(DayModel  day:days)
-      day.setSelecting(false);
-        if(adapter!=null)adapter.notifyDataSetChanged();
+
+    public void cleanSelection() {
+        for (DayModel day : days)
+            day.setSelecting(false);
+        if (adapter != null) adapter.notifyDataSetChanged();
+    }
+
+    public void chooseDays(int dayOfWeek) {
+        for (DayModel dayModel : days) {
+            Calendar cc = Calendar.getInstance();
+            cc.setTime(dayModel.getDate());
+            if (cc.get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
+                dayModel.setSelecting(true);
+            }
+        }
+        onRefresh();
+    }
+
+    public void unchooseDays(int dayOfWeek) {
+        for (DayModel dayModel : days) {
+            Calendar cc = Calendar.getInstance();
+            cc.setTime(dayModel.getDate());
+            if (cc.get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
+                dayModel.setSelecting(false);
+            }
+        }
+        onRefresh();
+
     }
 
     public void setType(DayView.SElECTTYPE type) {
         if (mSelectType != type) {
             mSelectType = type;
-            onRefresh();
+            if (adapter != null) {
+                adapter.setType(mSelectType);
+                adapter.notifyDataSetChanged();
+            }
         }
     }
 
+    private void resetAdapter() {
+        adapter = new LeAdapter(getContext(), days, mSelectType);
+        setAdapter(adapter);
+        adapter.notifyDataSetChanged();
+    }
 
     public void onRefresh() {
         if (adapter == null) {
-            adapter = new LeAdapter(getContext(), days, mSelectType);
-            setAdapter(adapter);
-        }
+            resetAdapter();
+        } else
+            adapter.notifyDataSetChanged();
     }
 
     public void setDays(ArrayList<DayModel> days) {

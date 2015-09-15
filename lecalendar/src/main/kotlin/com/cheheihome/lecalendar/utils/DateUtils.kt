@@ -15,10 +15,15 @@ public class DateUtils {
     }
 
     public fun aBeforeb(a: Calendar, b: Calendar): Boolean {
-        if (a.get(Calendar.YEAR) < b.get(Calendar.YEAR)) return true;
-        if (a.get(Calendar.MONTH) < b.get(Calendar.MONTH)) return true;
-        if (a.get(Calendar.DAY_OF_MONTH) < b.get(Calendar.DAY_OF_MONTH)) return true;
-        return false;
+        if (a.get(Calendar.YEAR) > b.get(Calendar.YEAR)) return false;
+        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH)) return false;
+        if (a.get(Calendar.DAY_OF_MONTH) >= b.get(Calendar.DAY_OF_MONTH)) return false;
+        return true;
+    }
+
+    public fun beforeToaday(a: Calendar): Boolean {
+        var today = Calendar.getInstance();
+        return aBeforeb(a, today)
     }
 
     public fun isInLastWeekOfMonth(c: Calendar): Boolean {
