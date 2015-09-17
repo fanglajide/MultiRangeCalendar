@@ -19,6 +19,7 @@ android {
     }
     sourceSets{
         main.java.srcDirs+='src/main/kotlin'
+        main.java.srcDirs += 'src/main/kotlin'
 
     }
     lintOptions {
@@ -29,6 +30,7 @@ android {
 
 
 buildscript {
+    ext.kotlin_version = '0.13.1513'
     ext.kotlin_version = '0.12.613'
     repositories {
         mavenCentral()
@@ -56,4 +58,5 @@ dependencies {
     compile 'com.android.support:design:23.0.0'
     debugCompile 'me.drakeet.library:crashwoodpecker:0.9.7'
     releaseCompile 'me.drakeet.library:crashwoodpecker-do-nothing:0.9.7'
+    compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }
