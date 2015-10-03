@@ -2,6 +2,7 @@ package com.cheheihome;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.view.Gravity;
@@ -74,7 +75,7 @@ public class LeCalendarPlus extends LinearLayout {
             week[i] = new CheckBox(getContext());
             week[i].setGravity(Gravity.CENTER);
 
-            week[i].setButtonDrawable(null);
+            week[i].setButtonDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             String s = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
             final Calendar t = c;

@@ -6,6 +6,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.AbsListView;
+import android.widget.Toast;
 
 import com.cheheihome.supercalendar.R;
 
@@ -68,6 +69,17 @@ public class MainActivity extends AppCompatActivity implements AbsListView.OnScr
         e.set(Calendar.DAY_OF_WEEK, 7);
         getDates(b, e);
         gridView.setDays(days);
+        gridView.setSelectListener(new LeCalendar.LeSelectListener() {
+            @Override
+            public void onSelectPosition(boolean status, int start, int end) {
+
+            }
+
+            @Override
+            public void OnTotalSelected(List<Date> dates) {
+                Toast.makeText(MainActivity.this,dates.size()+"",Toast.LENGTH_SHORT).show();
+            }
+        });
         // setGridView();
 
         //     setGrid();

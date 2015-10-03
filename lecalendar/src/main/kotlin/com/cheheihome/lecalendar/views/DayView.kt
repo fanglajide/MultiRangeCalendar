@@ -92,9 +92,10 @@ public class DayView : View {
             else
                 if (!open) backgroudColor = CLOSEBACKCOLOR;
                 else backgroudColor = OPENBACKCOLOR
-        mPaint.setColor(backgroudColor)
-        canvas.drawRect(0f, 0f, getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
-
+        //mPaint.setColor(backgroudColor)
+      //  canvas.drawRect(0f, 0f, getMeasuredWidth().toFloat(), getMeasuredHeight().toFloat(), mPaint)
+          setBackgroundColor(backgroudColor)
+      
         var c: Calendar = Calendar.getInstance();
         c.setTime(daymodel.date);
 
@@ -124,8 +125,9 @@ public class DayView : View {
         textPaint.setColor(upColor);
         textPaint.setTextAlign(Paint.Align.CENTER)
         var up: String ? = "";
-        if (daymodel.isFestival && !TextUtils.isEmpty(daymodel.festival)) up = daymodel.festival;
-        else if (daymodel.isFirstDayofMonth) {
+     //   if (daymodel.isFestival && !TextUtils.isEmpty(daymodel.festival)) up = daymodel.festival;
+       // else
+        if (daymodel.isFirstDayofMonth) {
             up = (1 + c.get(Calendar.MONTH)).toString() + "月"
         } else if (daymodel.isToday) up = "今天"
         var testWidth = textPaint.measureText(up);

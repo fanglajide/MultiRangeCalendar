@@ -18,8 +18,7 @@ import lecalendar.views.DayView;
  */
 public class LeCalendar extends InterceptGridView implements InterceptGridView.SuperCallBack {
     private DayView.SElECTTYPE mSelectType = DayView.SElECTTYPE.STATUS;
-    private
-    ArrayList<DayModel> days = new ArrayList<>();
+    private ArrayList<DayModel> days = new ArrayList<>();
     private LeAdapter adapter;
 
     public LeCalendar(Context context) {
@@ -47,31 +46,35 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
     public void cleanSelection() {
         for (DayModel day : days)
             day.setSelecting(false);
+        if (totalSelected != null) totalSelected.clear();
         if (adapter != null) adapter.notifyDataSetChanged();
+
     }
 
     public void chooseDays(int dayOfWeek) {
-        selecting=true;
+        selecting = true;
         for (DayModel dayModel : days) {
             Calendar cc = Calendar.getInstance();
             cc.setTime(dayModel.getDate());
             if (cc.get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
                 dayModel.setSelecting(selecting);
-                if(!totalSelected.contains(dayModel.getDate()))totalSelected.add(dayModel.getDate());
-          
+                if (!totalSelected.contains(dayModel.getDate()))
+                    totalSelected.add(dayModel.getDate());
+
             }
         }
         onRefresh();
     }
 
     public void unchooseDays(int dayOfWeek) {
-        selecting=false;
+        selecting = false;
         for (DayModel dayModel : days) {
             Calendar cc = Calendar.getInstance();
             cc.setTime(dayModel.getDate());
             if (cc.get(Calendar.DAY_OF_WEEK) == dayOfWeek) {
                 dayModel.setSelecting(selecting);
-                if(totalSelected.contains(dayModel.getDate()))totalSelected.remove(dayModel.getDate());
+                if (totalSelected.contains(dayModel.getDate()))
+                    totalSelected.remove(dayModel.getDate());
             }
         }
         onRefresh();
@@ -88,38 +91,32 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
         }
     }
 
-    private void resetAdapter() {
+    private void setupAdapter() {
         adapter = new LeAdapter(getContext(), days, mSelectType);
         setAdapter(adapter);
-        adapter.notifyDataSetChanged();
     }
 
     public void onRefresh() {
-        if (adapter == null) {
-            resetAdapter();
-        } else
-            adapter.notifyDataSetChanged();
+        if (adapter == null)
+            setupAdapter();
+        adapter.notifyDataSetChanged();
         handler.sendEmptyMessage(1);
     }
 
     public void setDays(ArrayList<DayModel> days) {
-             this.days = days;
-        Date first=days.get(0).getDate();
-        Calendar f=Calendar.getInstance();
+        Date first = days.get(0).getDate();
+        Calendar f = Calendar.getInstance();
         f.setTime(first);
-        while (f.get(Calendar.DAY_OF_WEEK)!=Calendar.SUNDAY){
-            f.add(Calendar.DATE,-1);
-            DayModel dayModel=new DayModel(false, false, null, 0, 0, null,f.getTime(), false, false, false, false, false);
+        while (f.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
+            f.add(Calendar.DATE, -1);
+            DayModel dayModel = new DayModel(false, false, null, 0, 0, null, f.getTime(), false, false, false, false, false);
             dayModel.init();
-            days.add(0,dayModel);
-
+            days.add(0, dayModel);
         }
+        this.days = days;
 
+        setupAdapter();
 
-        if (adapter == null) {
-            adapter = new LeAdapter(getContext(), days, mSelectType);
-            setAdapter(adapter);
-        }
         setSuperCallBack(this);
     }
 
@@ -234,13 +231,13 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
 
             for (int i = start; i <= end; i++) {
                 DayModel dayModel = days.get(i);
-                
+                if (dayModel.getBeforeToday()) continue;
                 if (totalSelected.contains(dayModel.getDate())) {
                     if (!selecting) totalSelected.remove(dayModel.getDate());
                 } else if (selecting) totalSelected.add(dayModel.getDate());
-            
+
             }
-              handler.sendEmptyMessage(1);
+            handler.sendEmptyMessage(1);
         }
     }
 
@@ -249,7 +246,8 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
         @Override
         public void handleMessage(Message msg) {
             super.handleMessage(msg);
-            if(msg.what==1&&selectListener!=null)selectListener.OnTotalSelected(totalSelected);
+            if (msg.what == 1 && selectListener != null)
+                selectListener.OnTotalSelected(totalSelected);
 
         }
     };
@@ -264,7 +262,8 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
     public interface LeSelectListener {
         //  void onSelectDayModels(boolean status, ArrayList<DayModel> selectDays);
         void onSelectPosition(boolean status, int start, int end);
-        void OnTotalSelected(List<Date> dates);   
+
+        void OnTotalSelected(List<Date> dates);
 
     }
 
