@@ -29,7 +29,6 @@ import lecalendar.views.DayView;
 public class LeCalendarPlus extends LinearLayout {
     LinearLayout weekHeader;
     LeCalendar mCalendar;
-    TextView txt_friday;
     DisplayMetrics displayMetrics;
     CheckBox[] week = new CheckBox[7];
 
@@ -54,11 +53,13 @@ public class LeCalendarPlus extends LinearLayout {
         setOrientation(VERTICAL);
         View dividerView = new View(getContext());
         dividerView.setBackgroundColor(Color.GRAY);
-        addView(dividerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2));
-        // weekHeader = (LinearLayout) LayoutInflater.from(getContext()).inflate(R.layout.calendar_header, null);
+        addView(dividerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
+
         weekHeader = week();
         addView(weekHeader, new ViewGroup.LayoutParams(headWidth(), headHeight()));
-        // addView(dividerView, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 2));
+        View dividerView2 = new View(getContext());
+        dividerView.setBackgroundColor(Color.GRAY);
+        addView(dividerView2, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, 1));
         mCalendar = new LeCalendar(getContext());
         ViewGroup.LayoutParams clp = new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT);
         mCalendar.setGravity(Gravity.FILL_HORIZONTAL);
@@ -78,7 +79,7 @@ public class LeCalendarPlus extends LinearLayout {
             week[i].setButtonDrawable(new ColorDrawable(Color.TRANSPARENT));
 
             String s = c.getDisplayName(Calendar.DAY_OF_WEEK, Calendar.SHORT, Locale.getDefault());
-            final Calendar t = c;
+
             week[i].setText(s);
             LinearLayout.LayoutParams lp = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.MATCH_PARENT, 1.0f);
             if (i == 5 || i == 6) {
@@ -140,6 +141,8 @@ public class LeCalendarPlus extends LinearLayout {
     }
 
     public void cleanSelection() {
+        for (CheckBox c : week)
+            c.setChecked(false);
         mCalendar.cleanSelection();
     }
 }

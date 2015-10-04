@@ -14,15 +14,19 @@ public class DateUtils {
         return (a.get(Calendar.YEAR) == b.get(Calendar.YEAR) && a.get(Calendar.MONTH) == b.get(Calendar.MONTH) && a.get(Calendar.DATE) == b.get(Calendar.DATE))
     }
 
-    public fun aBeforeb(a: Calendar, b: Calendar): Boolean {
-        if (a.get(Calendar.YEAR) > b.get(Calendar.YEAR)) return false;
-        if (a.get(Calendar.MONTH) > b.get(Calendar.MONTH)) return false;
-        if (a.get(Calendar.DAY_OF_MONTH) >= b.get(Calendar.DAY_OF_MONTH)) return false;
-        return true;
-    }
 
-    public fun beforeToaday(a: Calendar): Boolean {
-        var today = Calendar.getInstance();
+
+    public fun aBeforeb(a: Calendar, b: Calendar):Boolean {
+        if (a.get(Calendar.YEAR) != b.get(Calendar.YEAR))
+            return a.get(Calendar.YEAR) < b.get(Calendar.YEAR);
+        if (a.get(Calendar.MONTH) != b.get(Calendar.MONTH))
+            return a.get(Calendar.MONTH) < b.get(Calendar.MONTH);
+        return a.get(Calendar.DAY_OF_MONTH) < b.get(Calendar.DAY_OF_MONTH);
+    }
+    
+    
+    public fun beforeToday(a: Calendar): Boolean {
+        val today = Calendar.getInstance();
         return aBeforeb(a, today)
     }
 

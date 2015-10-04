@@ -134,7 +134,7 @@ public class DayView : View {
 
         var festPosY = (getPaddingTop() + festTextHeight - textPaint.descent() / 2)
         //  Log.d("super-posY","as:"+textPaint.ascent().toString()+"-ds;"+textPaint.descent().toString())
-
+        if(!daymodel.beforeToday)
         canvas.drawText(up, getPaddingLeft().toFloat() + testWidth.toFloat() / 2f, festPosY, textPaint);
 
 

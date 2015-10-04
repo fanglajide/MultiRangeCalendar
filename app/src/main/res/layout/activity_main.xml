@@ -17,15 +17,11 @@
 
 
 
-    <lecalendar.views.DayView android:layout_gravity="center"
-        android:padding="2dp"
-        android:layout_width="50dp"
-        android:layout_height="50dp" android:id="@+id/dayView"/>
 
 <com.cheheihome.LeCalendarPlus
     android:layout_marginTop="10dp"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" android:id="@+id/gridView"
+    android:layout_height="match_parent" android:id="@+id/calendar"
     android:numColumns="7"
 
     ></com.cheheihome.LeCalendarPlus>

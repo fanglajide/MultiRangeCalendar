@@ -109,8 +109,9 @@ public class LeCalendar extends InterceptGridView implements InterceptGridView.S
         f.setTime(first);
         while (f.get(Calendar.DAY_OF_WEEK) != Calendar.SUNDAY) {
             f.add(Calendar.DATE, -1);
-            DayModel dayModel = new DayModel(false, false, null, 0, 0, null, f.getTime(), false, false, false, false, false);
+            DayModel dayModel = new DayModel(false, false, null, 0, 0, null, f.getTime(), false, false, false, false, true);
             dayModel.init();
+            Log.d("daymodel--:",dayModel.toString());
             days.add(0, dayModel);
         }
         this.days = days;

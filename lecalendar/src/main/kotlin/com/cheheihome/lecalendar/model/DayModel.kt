@@ -29,11 +29,11 @@ data class DayModel(
     public fun init() {
 
         var c: Calendar = Calendar.getInstance();
-        var today: Calendar = Calendar.getInstance();
+        val today = Calendar.getInstance();
         c.setTime(date);
 
         isToday = dateUtils.sameDay(c, today);
-        beforeToday=dateUtils.beforeToaday(c)
+        beforeToday=dateUtils.beforeToday(c)
         isFirstDayofMonth = c.get(Calendar.DAY_OF_MONTH) == 1
         isFirstWeekinMonth = c.get(Calendar.DAY_OF_WEEK_IN_MONTH) ==1
       //  isLastWeekinMonth = dateUtils.isLast7dayOfMonth(c)
