@@ -9,8 +9,8 @@
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
         android:layout_height="?attr/actionBarSize"
+        android:background="?attr/colorPrimary"
         app:layout_collapseMode="pin"
-        android:background="@android:color/holo_purple"
         app:title="@string/app_name"
         app:popupTheme="@style/ThemeOverlay.AppCompat.Light"/>
 
@@ -19,7 +19,7 @@
 
 
 <com.cheheihome.LeCalendarPlus
-    android:layout_marginTop="10dp"
+
     android:layout_width="match_parent"
     android:layout_height="match_parent" android:id="@+id/calendar"
     android:numColumns="7"

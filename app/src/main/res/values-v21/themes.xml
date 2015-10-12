@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <style name="ZTheme" parent="AppTheme">
         <item name="android:statusBarColor">@android:color/holo_purple</item>
         <item name="android:colorAccent">@android:color/holo_blue_bright</item>
         <item name="android:colorPrimaryDark">@android:color/holo_red_dark</item>
-    <item name="android:colorPrimary">@android:color/holo_blue_light</item>
+        <item name="android:colorPrimary">@android:color/holo_blue_light</item>
 
         <item name="colorPrimary">@android:color/holo_purple</item>
         <item name="colorPrimaryDark">@android:color/holo_purple</item>

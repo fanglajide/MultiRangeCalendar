@@ -1,5 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <style name="ZTheme" parent="AppTheme"></style>
+    <style name="ZTheme" parent="AppTheme">
+
+        <item name="colorPrimary">#ffaa66cc</item>
+        <item name="colorPrimaryDark">#ffaa66cc</item>
+        <item name="colorAccent">#ffaa66cc</item>
+        <item name="android:textColorPrimary">@android:color/white</item>
+    </style>
 
 </resources>
